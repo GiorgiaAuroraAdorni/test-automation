@@ -140,9 +140,68 @@
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Introduction}
+	The main purpose of this assignment is analyse the classes \texttt{DirectedAcyclicGraph} and \texttt{EdmondsBlossomShrinking} provided by jgrapht resources, using \textbf{SonarLint}, an IDE extension that helps you detect and fix quality issues as you write code. Then, \textbf{Randoop}, that is a command line tool used for automatic unit test generation for a given Java program, is used to generate tests with a time budget of 3 seconds.
 	
+	\section{DirectedAcyclicGraph}
 	
+	\subsection*{SonarLint}
+	Running the analysis on DirectedAcyclicGraph class, SonarLint found the issues shown in Figure \ref{fig:sonar-graph}.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/DirectedAcyclicGraph-SonarLint.png}	
+		\caption{SonarLint issues founded in DirectedAcyclicGraph}
+		\label{fig:sonar-graph}
+	\end{figure}
+
+	In total 29 issues are found, in particular, 4 Critical Code Smells, 5 Major Code Smells and 20 Minor Code Smells.
 	
+	Analysing  the severity scale of SonarLint issues, the most serious problems identified, defined as Critical Code Smells, are those reporting "Make ... transient or serializable". I completely agree with the seriousness associated with these as they violate the contract of the serializable interface causing exceptions at runtime.
+	All the minor problems identified are all very useful suggestions to the programmer and they can be followed or not as they do not affect the functioning of the program.
+		
+	\subsection*{Randoop}
+	
+	\section{EdmondsBlossomShrinking}
+	
+	\subsection*{SonarLint}
+	Running the analysis on EdmondsBlossomShrinking class, SonarLint found the issues shown in Figure \ref{fig:sonar-ed}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/EdmondsBlossomShrinking-SonarLint.png}	
+		\caption{SonarLint issues founded in EdmondsBlossomShrinking}
+		\label{fig:sonar-ed}
+	\end{figure}
+	
+	In total 216 issues are found, in particular, 1 Critical Code Smells, 3 Major Code Smells, 10 Minor Code Smells and 2 Info Code Smell.
+	
+	Analysing  the severity scale of SonarLint issues, contrary to the DirectedAcyclicGraph class, in the EdmondsBlossomShrinking class, the most serious problems identified report "Refactor this method to reduce its Cognitive Complexity", which curiously I would not have identified as a problem of correctness as I did in the case of the violation of the serializable interfaces. 
+	Since the code is highly complex, it is difficult to guarantee its correctness and probably a future modification will lead to errors in the code.
+	
+	The minor errors are the same as those that appear in the analysis of DirectedAcyclicGraph.
+		
+	\subsection*{Randoop}
+	
+	\begin{lstlisting}[style=DOS,caption={Randoop Execution}, captionpos=b]
+java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources 
+randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
+	\end{lstlisting}
+	
+
+	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
+javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
+\end{lstlisting}
+
+	\begin{lstlisting}[style=DOS,caption={Execute Error Revealing Test}, captionpos=b]
+java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources:. 
+org.junit.runner.JUnitCore ErrorTest0
+\end{lstlisting}	
+	
+The commands you used/the step you followed to run each tool 
+Hint: documenting them with screenshots is fine 
+The errors found by Randoop
+Hint: you find them in ErrorTest0.java. You can ignore regression tests. If Randoop leaves some temporary sequences around your folder, you can eliminate them with rm RandoopTemporarySeqTest*
+How was Randoop able to detect the faults (describe the error test cases)? By looking at the source code of the project under test, are you able to understand and explain the root of the faults?
 	
 \end{document}
