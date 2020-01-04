@@ -163,6 +163,46 @@
 		
 	\subsection*{Randoop}
 	
+	Randoop is run on DirectedAcyclicGraph class with the following command:
+	
+	\begin{lstlisting}[style=DOS,caption={Randoop Execution}, captionpos=b]
+java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources 
+randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
+	\end{lstlisting}
+	
+	Then, Randoop generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
+	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
+javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
+	\end{lstlisting}
+	
+	\begin{lstlisting}[style=DOS,caption={Execute Error Revealing Test}, captionpos=b]
+java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources:. 
+org.junit.runner.JUnitCore ErrorTest0
+	\end{lstlisting}	
+	
+	After compiling, 9 different tests are generated.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/randoop-execution.png}
+		\caption{Compile Randoop}
+		\label{fig:randexe-graph}
+	\end{figure}
+
+After the execution, it is possible to see that all the tests thrown NullPointerException.
+\begin{figure}[H]
+	\centering
+	\begin{minipage}[b]{.9\textwidth}
+		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/error-revealing-test1.png}	
+	\end{minipage}
+	\begin{minipage}[b]{.9\textwidth}
+		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/error-revealing-test2.png}	
+	\end{minipage}
+\caption{Randoop execution on DirectedAcyclicGraph}
+\label{fig:randtest2-graph}
+\end{figure}
+
+
+\lstinputlisting[language=Java, caption={ErrorTestDirectedAcyclicGraph}, captionpos=b]{errortests/ErrorTestDirectedAcyclicGraph.java}
 	\section{EdmondsBlossomShrinking}
 	
 	\subsection*{SonarLint}
@@ -183,21 +223,41 @@
 	The minor errors are the same as those that appear in the analysis of DirectedAcyclicGraph.
 		
 	\subsection*{Randoop}
+	Randoop is run on EdmondsBlossomShrinking class with the following command
 	
 	\begin{lstlisting}[style=DOS,caption={Randoop Execution}, captionpos=b]
 java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources 
 randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
 	\end{lstlisting}
 	
-
+	Then, Randoop generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
 	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
 javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
-\end{lstlisting}
-
+	\end{lstlisting}
+	
 	\begin{lstlisting}[style=DOS,caption={Execute Error Revealing Test}, captionpos=b]
 java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources:. 
 org.junit.runner.JUnitCore ErrorTest0
-\end{lstlisting}	
+	\end{lstlisting}	
+	
+After compiling, only 1 test is generated.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/randoop-execution.png}
+		\caption{Compile Randoop}
+		\label{fig:randexe-ed}
+	\end{figure}
+	
+	After the execution, it is possible to see that also in this case the test thrown a NullPointerException as for the DirectedAcyclicGraph class.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/error-revealing-test.png}	
+		\caption{Randoop execution on EdmondsBlossomShrinking}
+		\label{fig:randtest-ed}
+	\end{figure}
+	
+	
+	\lstinputlisting[language=Java, caption={ErrorTestEdmondsBlossomShrinking}, captionpos=b]{errortests/ErrorTestEdmondsBlossomShrinking.java}
 	
 The commands you used/the step you followed to run each tool 
 Hint: documenting them with screenshots is fine 
