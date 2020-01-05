@@ -103,9 +103,12 @@
 \usepackage{xcolor}
 
 \usepackage{listings}
-\lstset{basicstyle=\scriptsize,
+\lstset{
+	basicstyle=\scriptsize,
 	showstringspaces=false,
 	breaklines=true,
+	%numbers=left,
+	%stepnumber=1,
 	commentstyle=\color{red},
 	keywordstyle=\color{blue}
 }
@@ -113,6 +116,7 @@
 \lstdefinestyle{DOS}
 {
 	backgroundcolor=\color{black},
+	breaklines=true,
 	basicstyle=\scriptsize\color{white}\ttfamily
 }
 
@@ -206,31 +210,31 @@ After the execution, it is possible to see that all the tests thrown NullPointer
 	\section{EdmondsBlossomShrinking}
 	
 	\subsection*{SonarLint}
-	Running the analysis on EdmondsBlossomShrinking class, SonarLint found the issues shown in Figure \ref{fig:sonar-ed}.
+	Running the analysis on \texttt{EdmondsBlossomShrinking} class, \textbf{SonarLint} found the issues shown in Figure \ref{fig:sonar-ed}.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/EdmondsBlossomShrinking-SonarLint.png}	
-		\caption{SonarLint issues founded in EdmondsBlossomShrinking}
+		\caption{SonarLint issues founded in \texttt{EdmondsBlossomShrinking}}
 		\label{fig:sonar-ed}
 	\end{figure}
 	
-	In total 216 issues are found, in particular, 1 Critical Code Smells, 3 Major Code Smells, 10 Minor Code Smells and 2 Info Code Smell.
+	In total 16 issues are found, in particular, 1 Critical Code Smells, 3 Major Code Smells, 10 Minor Code Smells and 2 Info Code Smell.
 	
-	Analysing  the severity scale of SonarLint issues, contrary to the DirectedAcyclicGraph class, in the EdmondsBlossomShrinking class, the most serious problems identified report "Refactor this method to reduce its Cognitive Complexity", which curiously I would not have identified as a problem of correctness as I did in the case of the violation of the serializable interfaces. 
+	Analysing  the severity scale of \textbf{SonarLint} issues, contrary to the \texttt{DirectedAcyclicGraph} class, in the \texttt{EdmondsBlossomShrinking} class, the most serious problems identified report "Refactor this method to reduce its Cognitive Complexity", which curiously I would not have identified as a problem of correctness as I did in the case of the violation of the serializable interfaces. 
 	Since the code is highly complex, it is difficult to guarantee its correctness and probably a future modification will lead to errors in the code.
 	
-	The minor errors are the same as those that appear in the analysis of DirectedAcyclicGraph.
+	The minor errors are the same as those that appear in the analysis of \texttt{DirectedAcyclicGraph}.
 		
 	\subsection*{Randoop}
-	Randoop is run on EdmondsBlossomShrinking class with the following command
+	Randoop is run on \texttt{EdmondsBlossomShrinking} class with the following command
 	
 	\begin{lstlisting}[style=DOS,caption={Randoop Execution}, captionpos=b]
 java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources 
 randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
 	\end{lstlisting}
 	
-	Then, Randoop generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
+	Then, \textbf{Randoop} generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
 	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
 javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
 	\end{lstlisting}
@@ -244,25 +248,25 @@ After compiling, only 1 test is generated.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/randoop-execution.png}
-		\caption{Compile Randoop}
+		\caption{Compile {Randoop}}
 		\label{fig:randexe-ed}
 	\end{figure}
 	
-	After the execution, it is possible to see that also in this case the test thrown a NullPointerException as for the DirectedAcyclicGraph class.
+	After the execution, it is possible to see that also in this case the test thrown a \texttt{NullPointerException} as for the \texttt{DirectedAcyclicGraph} class.
+	In this case, the exception is thrown when the instance method of a null object is called.
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{img/EdmondsBlossomShrinking/error-revealing-test.png}	
-		\caption{Randoop execution on EdmondsBlossomShrinking}
+		\caption{Randoop execution on \texttt{EdmondsBlossomShrinking}}
 		\label{fig:randtest-ed}
 	\end{figure}
 	
 	
 	\lstinputlisting[language=Java, caption={ErrorTestEdmondsBlossomShrinking}, captionpos=b]{errortests/ErrorTestEdmondsBlossomShrinking.java}
 	
-The commands you used/the step you followed to run each tool 
-Hint: documenting them with screenshots is fine 
-The errors found by Randoop
-Hint: you find them in ErrorTest0.java. You can ignore regression tests. If Randoop leaves some temporary sequences around your folder, you can eliminate them with rm RandoopTemporarySeqTest*
-How was Randoop able to detect the faults (describe the error test cases)? By looking at the source code of the project under test, are you able to understand and explain the root of the faults?
+	The cause of the \texttt{NullPointerException} is a sequence of incorrect calls. 
+	First of all, the \texttt{EdmondsBlossomShrinking} object is created using a deprecated constructor that does not require a graph and does not initialise the graph field. 
+	Than, during the call of the method \texttt{getMatching()}, the method \texttt{vertexSet()} is called on an instance of a null object since the graph is \texttt{null}. 
 	
 \end{document}
