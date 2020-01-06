@@ -146,35 +146,35 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\section{Introduction}
-	The main purpose of this assignment is analyse the classes \texttt{DirectedAcyclicGraph} and \texttt{EdmondsBlossomShrinking} provided by jgrapht resources, using \textbf{SonarLint}, an IDE extension that helps you detect and fix quality issues as you write code. Then, \textbf{Randoop}, that is a command line tool used for automatic unit test generation for a given Java program, is used to generate tests with a time budget of 3 seconds.
+	The main purpose of this assignment is to analyse the classes \texttt{DirectedAcyclicGraph} and \texttt{EdmondsBlossomShrinking} provided by jgrapht resources, using \textbf{SonarLint}, an IDE extension that helps you detect and fix quality issues as you write code. Then, \textbf{Randoop}, that is a command-line tool used for automatic unit test generation for a given Java program, is used to generate tests with a time budget of 3 seconds.
 	
 	\section{DirectedAcyclicGraph}
 	
 	\subsection*{SonarLint}
-	Running the analysis on DirectedAcyclicGraph class, SonarLint found the issues shown in Figure \ref{fig:sonar-graph}.
+	Running the analysis on \texttt{DirectedAcyclicGraph} class, \textbf{SonarLint} found the issues shown in Figure \ref{fig:sonar-graph}.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/DirectedAcyclicGraph-SonarLint.png}	
-		\caption{SonarLint issues founded in DirectedAcyclicGraph}
+		\caption{SonarLint issues founded in \texttt{DirectedAcyclicGraph}}
 		\label{fig:sonar-graph}
 	\end{figure}
 
 	In total 29 issues are found, in particular, 4 Critical Code Smells, 5 Major Code Smells and 20 Minor Code Smells.
 	
-	Analysing  the severity scale of SonarLint issues, the most serious problems identified, defined as Critical Code Smells, are those reporting "Make ... transient or serializable". I completely agree with the seriousness associated with these as they violate the contract of the serializable interface causing exceptions at runtime.
+	Analysing  the severity scale of \textbf{SonarLint} issues, the most serious problems identified, defined as Critical Code Smells, are those reporting "Make ... transient or serializable". I completely agree with the seriousness associated with these as they violate the contract of the serializable interface causing exceptions at runtime.
 	All the minor problems identified are all very useful suggestions to the programmer and they can be followed or not as they do not affect the functioning of the program.
 		
 	\subsection*{Randoop}
 	
-	Randoop is run on DirectedAcyclicGraph class with the following command:
+	\textbf{Randoop} is run on \texttt{DirectedAcyclicGraph} class with the following command:
 	
 	\begin{lstlisting}[style=DOS,caption={Randoop Execution}, captionpos=b]
 java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sources 
 randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
 	\end{lstlisting}
 	
-	Then, Randoop generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
+	Then, \textbf{Randoop} generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiled and executed with the following commands:
 	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
 javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
 	\end{lstlisting}
@@ -188,11 +188,12 @@ org.junit.runner.JUnitCore ErrorTest0
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/randoop-execution.png}
-		\caption{Compile Randoop}
+		\caption{Compile {Randoop}}
 		\label{fig:randexe-graph}
 	\end{figure}
 
-After the execution, it is possible to see that all the tests thrown NullPointerException.
+After the execution, it is possible to see that all the tests thrown \texttt{NullPointerException}. 
+
 \begin{figure}[H]
 	\centering
 	\begin{minipage}[b]{.9\textwidth}
@@ -201,12 +202,19 @@ After the execution, it is possible to see that all the tests thrown NullPointer
 	\begin{minipage}[b]{.9\textwidth}
 		\includegraphics[width=\linewidth]{img/DirectedAcyclicGraph/error-revealing-test2.png}	
 	\end{minipage}
-\caption{Randoop execution on DirectedAcyclicGraph}
+\caption{Randoop execution on \texttt{DirectedAcyclicGraph}}
 \label{fig:randtest2-graph}
 \end{figure}
 
 
 \lstinputlisting[language=Java, caption={ErrorTestDirectedAcyclicGraph}, captionpos=b]{errortests/ErrorTestDirectedAcyclicGraph.java}
+	
+	
+All the \texttt{NullPointerExceptions} are caused by a similar sequence of incorrect calls.
+Both the methods \texttt{VisitedArrayImpl()} and \texttt{VisitedBitSetImpl()} do not define constructors, except the default one that does not do anything. 
+These classes expect firstly a call to the \texttt{getInstance(Region region)} method, that \textbf{Randoop} does not execute. 
+Hence, all the attributes are set null and this cause the failure of the calling of any other method.
+
 	\section{EdmondsBlossomShrinking}
 	
 	\subsection*{SonarLint}
@@ -234,7 +242,7 @@ java -classpath lib/randoop-all-4.2.0.jar:out/production/jgrapht-core-0.9.2-sour
 randoop.main.Main gentests --classlist=classlist.txt --time-limit=3
 	\end{lstlisting}
 	
-	Then, \textbf{Randoop} generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiles and executed with the following commands:
+	Then, \textbf{Randoop} generates an error-revealing test (by default called \\ \texttt{ErrorTest0.java}) that is compiled and executed with the following commands:
 	\begin{lstlisting}[style=DOS,caption={Compile Error Revealing Test}, captionpos=b]
 javac -classpath lib/randoop-all-4.2.0.jar ErrorTest0.java -sourcepath src/
 	\end{lstlisting}
@@ -252,8 +260,8 @@ After compiling, only 1 test is generated.
 		\label{fig:randexe-ed}
 	\end{figure}
 	
-	After the execution, it is possible to see that also in this case the test thrown a \texttt{NullPointerException} as for the \texttt{DirectedAcyclicGraph} class.
-	In this case, the exception is thrown when the instance method of a null object is called.
+	After the execution, it is possible to see that also, in this case, the test thrown a \texttt{NullPointerException} as for the \texttt{DirectedAcyclicGraph} class.
+	In this case, the exception is threw when the instance method of a null object is called.
 	
 	\begin{figure}[H]
 		\centering
@@ -267,6 +275,6 @@ After compiling, only 1 test is generated.
 	
 	The cause of the \texttt{NullPointerException} is a sequence of incorrect calls. 
 	First of all, the \texttt{EdmondsBlossomShrinking} object is created using a deprecated constructor that does not require a graph and does not initialise the graph field. 
-	Than, during the call of the method \texttt{getMatching()}, the method \texttt{vertexSet()} is called on an instance of a null object since the graph is \texttt{null}. 
+	Then, during the call of the method \texttt{getMatching()}, the method \texttt{vertexSet()} is called on an instance of a null object since the graph is \texttt{null}. 
 	
 \end{document}
